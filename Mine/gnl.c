@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   gnl.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clwenhaj <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: clwenhaj <clwenhaj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 16:03:56 by clwenhaj          #+#    #+#             */
-/*   Updated: 2026/02/18 16:45:00 by clwenhaj         ###   ########.fr       */
+/*   Updated: 2026/02/25 14:43:12 by clwenhaj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <unistd.h>
-
-# define BUFFER_SIZE 1024
+#include "gnl.h"
 
 char	*ft_strdup(char *str)
 {
@@ -51,21 +46,21 @@ char	*get_next_line(int fd)
 	{
 		if (buffer_i >= buffer_size)	// tout ce quon avait lu a ete consomme
 		{
+			buffer_i = 0;				// on remet a 0 pour relire depuis le debut du fichier
 			buffer_size = read(fd, buffer, BUFFER_SIZE);
-			buffer_size = 0;	// on remet a 0 pour relire depuis le debut du fichier
-			if (buffer_size <= 0)	// on quitte la boucle si read echoue (-1) ou read revoie 0 (fin du fichier)
+			if (buffer_size <= 0)		// on quitte la boucle si read echoue (-1) ou read revoie 0 (fin du fichier)
 				break ;
 		}
-		line[i] = buffer[buffer_i];     // copie caractere / caractere du buffer dans line
+		line[i] = buffer[buffer_i]; 	// copie caractere / caractere du buffer dans line
 		i++;
 		buffer_i++;
-		if (line[i - 1] == '\n')	// on arrete des quon rencontre \n
+		if (line[i - 1] == '\n')		// on arrete des quon rencontre \n
 			break ;
 	}
-	if (i == 0)				// si aucun caractere lu i.e fin du fichier
+	if (i == 0)							// si aucun caractere lu i.e fin du fichier
 		return (NULL);
 	line[i] = '\0';
-	return (ft_strdup(line));		// renvoie une copie dynamique de la ligne
+	return (ft_strdup(line));			// renvoie une copie dynamique de la ligne
 }
 
 int	main(int ac, char **av)
@@ -73,8 +68,7 @@ int	main(int ac, char **av)
 	char	*line;
 	int	fd = 0;
 
-	if (ac > 1)
-		fd = open(av[1], O_RDONLY);
+	fd = open(av[1], O_RDONLY);
 	line = get_next_line(fd);
 	while (line)
 	{
