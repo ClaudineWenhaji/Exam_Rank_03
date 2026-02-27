@@ -11,71 +11,67 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#define SAFE 1
-#define NOT_SAFE 0
-
-static int is_safe(int *queen, int col_to_place, int row_to_test)
+int is_safe(int *board, int row, int col)
 {
-	int previous_col = 0;
-	while (previous_col < col_to_place)
+	int i = 0;
+	int abs;
+
+	while (i < row)
 	{
-		if (queen[previous_col] == row_to_test) // Si une reine est déjà sur la même ligne, pas bon
-			return (NOT_SAFE);
-		if (queen[previous_col] - previous_col == row_to_test - col_to_place) // diagonale descendente
-									 // si les deux cases sont sur 
-									 // la même diagonale principale
-			return (NOT_SAFE);
-		if (queen[previous_col] + previous_col == row_to_test + col_to_place) // diagonale montante
-			return (NOT_SAFE);
-		previous_col++;
+		abs = board[i] - col;
+
+		if (abs < 0)
+			abs = -abs;
+		if (board[i] == col || abs == row - i)
+			return (0);
+		i++;
 	}
-	return (SAFE);
+	return (1);
 }
 
-void	print_board(int *queen, int size)
-{
-	int col = 0;
-	while (col < size)
-	{
-		if (col > 0)
-			printf(" ");
-		printf("%d", queen[col]);
-		col++;
-	}
-	printf("\n");
-}
 
-void	solve(int *queen, int size, int col_to_fill)
+void	solve(int *queen, int row, int size)
 {
-	int row_to_test = 0;
-	if (col_to_fill == size)
+	if (row == size)
 	{
-		print_board(queen, size);
+		int	i = 0;
+		while (i < size)
+		{
+			if (i > 0)
+				printf(" ");
+			printf("%d", queen[i]);
+			i++;
+		}
+		printf("\n");
 		return ;
 	}
-	while (row_to_test < size)
+	int	col = 0;
+	while (col <size)
 	{
-		if (is_safe(queen, col_to_fill, row_to_test) == SAFE)
+		if (is_safe(queen, row, col))
 		{
-			queen[col_to_fill] = row_to_test;
-			solve(queen, size, col_to_fill + 1);
+			queen[row] = col;
+			solve(queen, row + 1, size);
 		}
-		row_to_test++;
+		col++;
 	}
 }
 
-int main(int argc, char **argv)
+int main(int ac, char **av)
 {
-	if (argc != 2)
-		return (0);
-	int size = atoi(argv[1]);
-	if (size < 1)
-		return (0);
-	int *queens = malloc(sizeof(int) * size);
-	if (!queens)
-		return (0);
-	if (size != 2 && size != 3)
-		solve(queens, size, 0);
-	free(queens);
+	if (ac == 2)
+	{
+		int size = atoi(av[1]);
+		if (size == 0)
+		{
+			printf("\n");
+			return (0);
+		}
+		int *queen = malloc(sizeof(int) * size);
+		if (!queen)
+			return (0);
+		solve(queen, 0, size);
+		free(queen);
+	}
 	return (0);
 }
