@@ -5,19 +5,17 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: clwenhaj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/26 12:14:03 by clwenhaj          #+#    #+#             */
-/*   Updated: 2026/02/26 12:35:27 by clwenhaj         ###   ########.fr       */
+/*   Created: 2026/03/02 15:01:41 by clwenhaj          #+#    #+#             */
+/*   Updated: 2026/03/02 15:17:59 by clwenhaj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
 
 void	find_solutions(int *set, int *subset, int target, int set_size, int pos, int subset_size, int subset_sum)
 {
-	int	i = 0;
-
+	int i = 0;
 	if (pos == set_size)
 	{
 		if (subset_sum == target)
@@ -36,44 +34,35 @@ void	find_solutions(int *set, int *subset, int target, int set_size, int pos, in
 	subset[subset_size] = set[pos];
 	find_solutions(set, subset, target, set_size, pos + 1, subset_size + 1, subset_sum + set[pos]);
 	find_solutions(set, subset, target, set_size, pos + 1, subset_size, subset_sum);
-
 }
 
 int	main(int ac, char **av)
 {
-	int	*set;
-	int	*subset;
-	int	target;
-	int	set_size;
-	int	i;
-
-	if (ac < 2)
-		return (1);
+	int *set;
+	int *subset;
+	int size;
+	int target;
 
 	target = atoi(av[1]);
-	set_size = ac - 2;
-	
-	if (set_size == 0)
+	size = ac - 2;
+	if (size == 2)
 	{
 		printf("\n");
 		return (0);
 	}
-	
-	set = malloc(sizeof(int) * set_size);
+	set = malloc(sizeof(int) * size);
 	if (!set)
 		return (1);
-	subset = malloc(sizeof(int) * set_size);
+	subset = malloc(sizeof(int) * size);
 	if (!subset)
 		return (1);
-	i = 0;
-	while (i < set_size)
+	int i = 0;
+	while (i < size)
 	{
 		set[i] = atoi(av[i + 2]);
 		i++;
 	}
-
-	find_solutions(set, subset, target, set_size, 0, 0, 0);
-
+	find_solutions(set, subset, target, size, 0, 0, 0);
 	free(set);
 	free(subset);
 	return (0);
