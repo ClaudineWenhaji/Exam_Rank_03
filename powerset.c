@@ -6,7 +6,7 @@
 /*   By: clwenhaj <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/02 15:01:41 by clwenhaj          #+#    #+#             */
-/*   Updated: 2026/03/02 15:17:59 by clwenhaj         ###   ########.fr       */
+/*   Updated: 2026/03/03 12:38:02 by clwenhaj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,6 @@ int	main(int ac, char **av)
 
 	target = atoi(av[1]);
 	size = ac - 2;
-	if (size == 2)
-	{
-		printf("\n");
-		return (0);
-	}
 	set = malloc(sizeof(int) * size);
 	if (!set)
 		return (1);
